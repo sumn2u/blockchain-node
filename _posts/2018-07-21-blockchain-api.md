@@ -225,3 +225,45 @@ Now run `http://localhost:3000/blockchain`.It will give you following result
 
 No make a transaction. make a `POST` request through postman.
 ![Transaction]({{site.baseurl}}/assets/img/transaction.png)
+
+
+Now run again the `http://localhost:3000/blockchain`
+{% highlight json %}
+{
+  "chain": [
+    {
+      "index": 1,
+      "timestamp": 1531686556155,
+      "transactions": [],
+      "nonce": 100,
+      "hash": "Genesis block",
+      "prevBlockHash": "0"
+    },
+    {
+      "index": 2,
+      "timestamp": 1531686569505,
+      "transactions": [
+        {
+          "amount": 1,
+          "sender": "00000",
+          "recipient": "sampleapp"
+        }
+      ],
+      "nonce": 44,
+      "hash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964",
+      "prevBlockHash": "Genesis block"
+    }
+  ],
+  "pendingTransactions": [
+    {},
+    {
+      "amount": 190,
+      "sender": "JACKIE",
+      "recipient": "HELEN"
+    }
+  ]
+}
+{% endhighlight %}
+
+
+You can see the pending transactions. Now the miner will mine it. Now run the `http://localhost:3000/mine` endpoint.

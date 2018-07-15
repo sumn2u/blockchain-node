@@ -2,9 +2,10 @@
   "name": "blockchain-node",
   "version": "1.0.0",
   "description": "a simple blockchain demo",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch src -e js src/api.js"
   },
   "keywords": [
     "blockchain",
@@ -13,6 +14,9 @@
   "author": "Suman Kunwar",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "nodemon": "^1.18.2",
     "sha256": "^0.2.0"
   }
 }

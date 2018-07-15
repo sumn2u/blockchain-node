@@ -1,14 +1,11 @@
----
-layout: null
----
 [
-  {% for post in site.posts %}
+  
     {
-      "title"    : "{{ post.title | escape }}",
-      "category" : "{{ post.category }}",
-      "tags"     : "{{ post.tags | join: ', ' }}",
-      "url"      : "{{ site.baseurl }}{{ post.url }}",
-      "date"     : "{{ post.date }}"
-    } {% unless forloop.last %},{% endunless %}
-  {% endfor %}
+      "title"    : "Building Blockchain Using Nodejs",
+      "category" : "",
+      "tags"     : "Blockchain, Nodejs",
+      "url"      : "/blockchain/",
+      "date"     : "2018-07-14 06:32:20 -0400"
+    } 
+  
 ]

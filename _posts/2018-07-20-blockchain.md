@@ -366,7 +366,7 @@ Instead of running `node test/blockchain.js` we can use
 `nodemon test/blockchain.js`, here we use [nodemon](https://github.com/remy/nodemon) which helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 
 
-[Source Code for Blockchain in Nodejs](https://github.com/sumn2u/blockchain-node/archive/master.zip)
+[Source Code for Blockchain in Nodejs](https://github.com/sumn2u/blockchain-node/archive/0.1.zip)
 
 
 

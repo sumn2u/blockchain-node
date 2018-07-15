@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Building Blockchain Using Nodejs - iamsuman</title>
+	<meta name="description" content="You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes.">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#311e3e">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#311e3e">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+	<!-- Icon -->
+	<link rel="icon" href="/assets/humanassitai.ico">
+</head>
+
+<body>
+  <div class="flex-container">
+  <header class="main-header">
+  <div class="wrapper">
+    <div class="header-flex">
+      <div class="menu-icon-container">
+        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+      </div>
+      <nav class="main-nav">
+        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+        <ul>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+      <p class="logo"><a href="/">Suman Kunwar</a></p>
+      <div class="search-icon-container">
+        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+</header> <!-- End Header -->
+
+  <article class="article-page">
+    <div class="page-image">
+      <div class="cover-image" style="background: url(/assets/img/post-6.jpg) center no-repeat; background-size: cover;"></div>
+    </div>
+    <div class="wrapper">
+      <div class="page-content">
+        <div class="header-page">
+          <h1 class="page-title">Building Blockchain Using Nodejs</h1>
+          <div class="page-date"><time datetime="2018-07-14 13:32:20 +0300">2018, Jul 14</time></div>
+        </div>
+        <p>Blockchain is an <code class="highlighter-rouge">immutable distributed ledger </code>.A ledger consists of two distinct, though related, parts – a <code class="highlighter-rouge">blockchain</code> and the <code class="highlighter-rouge">state database</code>, also known as <code class="highlighter-rouge">world state</code>. Unlike other ledgers, blockchains are immutable – that is, once a block has been added to the chain, it cannot be changed. In contrast, the <code class="highlighter-rouge">world state</code> is a database containing the current value of the set of key-value pairs that have been added, modified or deleted by the set of validated and committed transactions in the blockchain.<a href="http://hyperledger-fabric.readthedocs.io/en/latest/glossary.html#ledger">1</a></p>
+
+<hr />
+
+<h2 id="build-a-blockchain">Build a Blockchain</h2>
+
+<h3 id="prerequisites">Prerequisites</h3>
+<p>You will need the following things properly installed on your laptop/pc.</p>
+
+<ul>
+  <li><a href="http://git-scm.com/">Git</a></li>
+  <li><a href="http://nodejs.org/">Node.js</a> (with NPM)</li>
+</ul>
+
+<p>To verfiy everything is installed correctly run followings commands: <code class="highlighter-rouge">npm --version</code> and <code class="highlighter-rouge">node --version</code></p>
+
+<h3 id="project-folder-structure">Project folder structure</h3>
+<p>With your favourite text editor create <code class="highlighter-rouge">blockchain-node</code> project folder,go inside that folder and create <code class="highlighter-rouge">src</code> and <code class="highlighter-rouge">test</code> folder with <code class="highlighter-rouge">blockchain.js</code> file inside:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>blockchain-node
+│   README.md
+└───src
+│   │   blockchain.js  
+└───test
+    │   blockchain.js  
+</code></pre>
+</div>
+
+<p>To initialize Nodejs  runtime, from your terminal run command</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>npm init
+</code></pre>
+</div>
+<p>Install SHA256 module to compute SHA256 of strings or bytes.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install sha256
+</code></pre>
+</div>
+
+<p>Now our blockchain-node folder structure looks like this:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>blockchain-node
+│   README.md
+|   package.json
+|   
+|___node_modules
+|
+└───src
+│   │   blockchain.js  
+└───test
+    │   blockchain.js  
+</code></pre>
+</div>
+
+<p>All data are stored inside block objects. A block contains an ordered set of transactions. It is cryptographically linked to the preceding block, and in turn it is linked to be subsequent blocks.the first block in such a chain of blocks is called the <code class="highlighter-rouge">genesis block</code>. Later, it will be connnected in a chain inside our blockchain</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Block</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">,</span> <span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">hash</span><span class="p">,</span> <span class="nx">transactions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="nx">index</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">=</span> <span class="nx">timestamp</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">transactions</span> <span class="o">=</span> <span class="nx">transactions</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">nonce</span> <span class="o">=</span> <span class="nx">nonce</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="nx">hash</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">prevBlockHash</span> <span class="o">=</span> <span class="nx">prevBlockHash</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Block object has following property:</p>
+<ul>
+  <li><code class="highlighter-rouge">index:</code> this is basically the block number in our chain.</li>
+  <li><code class="highlighter-rouge">timestamp:</code> the time when this block was created.</li>
+  <li><code class="highlighter-rouge">transactions:</code> when we create a new block, we want to store all of the new transactions that have just been created. These blocks are immutable.</li>
+  <li><code class="highlighter-rouge">nonce:</code> nonce (“number only used once”) is a number added to a hashed block that, when rehashed, meets the difficulty level restrictions. The nonce is the number that blockchain miners are solving for.</li>
+  <li><code class="highlighter-rouge">hash:</code> a single string that all of our transactions and some info are going to be basically compressed into.</li>
+  <li><code class="highlighter-rouge">prevBlockHash:</code>  hash data from previous block.</li>
+</ul>
+
+<h3 id="blockchain-object">Blockchain Object</h3>
+<p><code class="highlighter-rouge">Blockchain</code> class has ability to be instantiated, create new Block, access the latest Block information, make new Transaction, hash Block, run Proof Of Work, and has chain of Blocks along with pending Transactions that should be stored when new Block is created.</p>
+
+<h3 id="constructor">Constructor</h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">chain</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pendingTransactions</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">creatNewBlock</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s1">'0'</span><span class="p">,</span> <span class="s1">'Genesis block'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<ul>
+  <li><code class="highlighter-rouge">chain:</code> is a transaction log structured as hash-linked blocks of transactions</li>
+  <li><code class="highlighter-rouge">transactions:</code> where we will hold all of the new transactions that are created before they are placed into a new Block.</li>
+  <li>We also create a Genesis Block in the constructor function.</li>
+</ul>
+
+<p>So what is a Genesis Block?</p>
+<blockquote>
+  <p>The configuration block that initializes the ordering service, or serves as the first block on a chain.</p>
+</blockquote>
+
+<p>The <code class="highlighter-rouge">createNewBlock()</code> method has a <code class="highlighter-rouge">nonce</code>, a <code class="highlighter-rouge">prevBlockHash</code> and a <code class="highlighter-rouge">hash</code> as parameters.
+We don’t have any prevBlockHash and we haven’t done any Proof Of Work. So to create this Block, we simply pass in some arbitrary parameters like below (or anything we like):</p>
+<ul>
+  <li>nonce: 100</li>
+  <li>prevBlockHash: ‘0’</li>
+  <li>hash: ‘Genesis block’</li>
+</ul>
+
+<p>Create new Block</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="nx">creatNewBlock</span><span class="p">(</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">newBlock</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Block</span><span class="p">(</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">chain</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">(),</span>
+            <span class="nx">nonce</span><span class="p">,</span>
+            <span class="nx">prevBlockHash</span><span class="p">,</span>
+            <span class="nx">hash</span><span class="p">,</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">pendingTransactions</span>
+        <span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">pendingTransactions</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">chain</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newBlock</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nx">newBlock</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This method takes 3 parameters: nonce, prevBlockHash and hash.</p>
+<ul>
+  <li>First, we create a new Block object.</li>
+  <li>Next, we set pendingTransactions equal to an empty array. This is because once we create a new Block, we are putting all of the new transactions into this Block. Clearing the entire transactions array helps us start over for the next Block.</li>
+  <li>Then we push new Block into our chain.</li>
+  <li>Finally we return the new Block.</li>
+</ul>
+
+<h3 id="get-latest-block">Get latest Block</h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="nx">getLatestBlock</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">chain</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">chain</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="make-new-transaction">Make new Transaction</h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="nx">makeNewTransaction</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="nx">sender</span><span class="p">,</span> <span class="nx">recipient</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">transaction</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">amount</span><span class="p">:</span> <span class="nx">amount</span><span class="p">,</span>
+            <span class="na">sender</span><span class="p">:</span> <span class="nx">sender</span><span class="p">,</span>
+            <span class="na">recipient</span><span class="p">:</span> <span class="nx">recipient</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">pendingTransactions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">transaction</span><span class="p">);</span>
+
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">amount</span><span class="p">}</span> <span class="nx">from</span> <span class="nx">$</span><span class="p">{</span><span class="nx">sender</span><span class="p">}</span> <span class="nx">to</span> <span class="nx">$</span><span class="p">{</span><span class="nx">recipient</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">getLatestBlock</span><span class="p">().</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>This method takes 3 parameters:</p>
+<ul>
+  <li><code class="highlighter-rouge">amount:</code> indicates how much is being sent in this transaction.</li>
+  <li><code class="highlighter-rouge">sender:</code> sender’s address.</li>
+  <li>
+    <p><code class="highlighter-rouge">recipient:</code> recipient’s address.</p>
+  </li>
+  <li>First, we create a new transaction object from these parameters.</li>
+  <li>Next, we push this transaction into our pendingtransactions array.</li>
+</ul>
+
+<p>Remember all this transactions in this array are not really set in the ledger. They’re not really recorded into our Blockchain yet, it just happens when a new Block is created.</p>
+<blockquote>
+  <p>So all of these new transactions are just pending transactions and they have not been validated.</p>
+</blockquote>
+
+<ul>
+  <li>Finally, we return the number of the Block that this transaction will be added to.</li>
+</ul>
+
+<h3 id="hash-block">Hash Block</h3>
+<p>Inside of this method, we use SHA256 hashing to hash our Block data.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">sha256</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'sha256'</span><span class="p">);</span>
+
+<span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="nx">hashBlock</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlock</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">prevBlockHash</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">currentBlock</span><span class="p">)</span> <span class="o">+</span> <span class="nx">nonce</span><span class="p">;</span>
+        <span class="kr">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">sha256</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">hash</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="proof-of-work">Proof of Work</h3>
+<p>Proof of Work is a very important method essential to Blockchain technology. It is one of the reasons that Bitcoin and many other Blockchains are so secured.</p>
+
+<p>So, what is Proof of Work?</p>
+<blockquote>
+  <p>Proof-of-Work, or PoW, is the original consensus algorithm in a Blockchain network[2].</p>
+</blockquote>
+
+<p>Everytime we create a new Block, we first have to make sure that it is a legitimate block by mining it through Proof of Work.</p>
+
+<p><code class="highlighter-rouge">proofOfWork()</code> method will take in the prevBlockHash and the currentBlockData.
+From this data, it is going to try to generate a specific hash.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">Blockchain</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="nx">proofOfWork</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">nonce</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">hash</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hashBlock</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nx">hash</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">!==</span> <span class="s1">'00'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">nonce</span><span class="o">++</span><span class="p">;</span>
+            <span class="nx">hash</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hashBlock</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">);</span>
+        <span class="p">};</span>
+
+        <span class="k">return</span> <span class="nx">nonce</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This hash, in our case, is going to be a hash that starts with 2 zeros (‘00’).
+The hash that is generated from SHA256 is random. So inorder to make it possible we can run our <code class="highlighter-rouge">hashBlock()</code> method many many times until we get a hash that starts with 2 zeros.</p>
+
+<p>The <code class="highlighter-rouge">proofOfWork()</code> method will secure our Blockchain is because in order to generate the correct hash, we have to run <code class="highlighter-rouge">hashBlock()</code> numerous time thus resulting a high computing power and energy.</p>
+
+<p>Here yo can see our  <code class="highlighter-rouge">hashBlock()</code> method takes not only the  currentBlockData, but  also the prevBlockHash. This means that all of the Blocks in our Blockchain are linked together by their data.</p>
+
+<h3 id="run-blockchain">Run Blockchain</h3>
+<p><code class="highlighter-rouge">test.blockchain.js</code></p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">Blockchain</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../src/blockchain'</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">mine</span><span class="p">(</span><span class="nx">blockChain</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'&gt;&gt;&gt; Mining............'</span><span class="p">);</span>
+
+    <span class="kr">const</span> <span class="nx">latestBlock</span> <span class="o">=</span> <span class="nx">blockChain</span><span class="p">.</span><span class="nx">getLatestBlock</span><span class="p">(),</span>
+          <span class="nx">prevBlockHash</span> <span class="o">=</span> <span class="nx">latestBlock</span><span class="p">.</span><span class="nx">hash</span><span class="p">,</span>
+          <span class="nx">currentBlockData</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">transactions</span><span class="p">:</span> <span class="nx">blockChain</span><span class="p">.</span><span class="nx">pendingTransactions</span><span class="p">,</span>
+            <span class="na">index</span><span class="p">:</span> <span class="nx">latestBlock</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span>
+         <span class="p">},</span>
+         <span class="nx">nonce</span> <span class="o">=</span> <span class="nx">blockChain</span><span class="p">.</span><span class="nx">proofOfWork</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">),</span>
+         <span class="nx">blockHash</span> <span class="o">=</span> <span class="nx">blockChain</span><span class="p">.</span><span class="nx">hashBlock</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">);</span>
+
+    <span class="c1">// reward for mining</span>
+    <span class="nx">blockChain</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'00000'</span><span class="p">,</span> <span class="s1">'miningNode'</span><span class="p">);</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'&gt;&gt;&gt; Create new Block:\n'</span><span class="p">,</span> <span class="nx">blockChain</span><span class="p">.</span><span class="nx">creatNewBlock</span><span class="p">(</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">blockHash</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">bitcoin</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blockchain</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'&gt;&gt;&gt; Create new Blockchain:\n'</span><span class="p">,</span> <span class="nx">bitcoin</span><span class="p">);</span>
+
+<span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="s1">'JASON'</span><span class="p">);</span>
+
+<span class="nx">mine</span><span class="p">(</span><span class="nx">bitcoin</span><span class="p">);</span>
+
+<span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">1120</span><span class="p">,</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="s1">'JASON'</span><span class="p">);</span>
+<span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="s1">'JASON'</span><span class="p">,</span> <span class="s1">'JACK'</span><span class="p">);</span>
+<span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">2700</span><span class="p">,</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="s1">'JASON'</span><span class="p">);</span>
+
+<span class="nx">mine</span><span class="p">(</span><span class="nx">bitcoin</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'&gt;&gt;&gt; Current Blockchain Data:\n'</span><span class="p">,</span> <span class="nx">bitcoin</span><span class="p">);</span></code></pre></figure>
+
+<p>Run cammand: <code class="highlighter-rouge">node test/blockchain.js</code>.</p>
+
+<h3 id="create-new-blockchain">Create new Blockchain:</h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="o">&gt;&gt;&gt;</span> <span class="nx">Create</span> <span class="k">new</span> <span class="nx">Blockchain</span><span class="err">:</span>
+ <span class="nx">Blockchain</span> <span class="p">{</span>
+  <span class="nl">chain</span><span class="p">:</span>
+   <span class="p">[</span> <span class="nx">Block</span> <span class="p">{</span>
+       <span class="nl">index</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271727</span><span class="p">,</span>
+       <span class="nx">transactions</span><span class="err">:</span> <span class="p">[],</span>
+       <span class="nx">nonce</span><span class="err">:</span> <span class="mi">100</span><span class="p">,</span>
+       <span class="nx">hash</span><span class="err">:</span> <span class="s1">'Genesis block'</span><span class="p">,</span>
+       <span class="nx">prevBlockHash</span><span class="err">:</span> <span class="s1">'0'</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">pendingTransactions</span><span class="err">:</span> <span class="p">[]</span> <span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">120</span> <span class="nx">from</span> <span class="nx">JACK</span> <span class="nx">to</span> <span class="nx">JASON</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Mining</span><span class="p">............</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">1</span> <span class="nx">from</span> <span class="mi">00000</span> <span class="nx">to</span> <span class="nx">miningNode</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Create</span> <span class="k">new</span> <span class="nx">Block</span><span class="err">:</span>
+ <span class="nx">Block</span> <span class="p">{</span>
+  <span class="nl">index</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271748</span><span class="p">,</span>
+  <span class="nx">transactions</span><span class="err">:</span>
+   <span class="p">[</span> <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'JASON'</span> <span class="p">},</span>
+     <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'00000'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'miningNode'</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">nonce</span><span class="err">:</span> <span class="mi">158</span><span class="p">,</span>
+  <span class="nx">hash</span><span class="err">:</span>
+   <span class="s1">'00fc872e1ec7592dc50432882f601d0a30805d40925760e2b4363d288bee0d1e'</span><span class="p">,</span>
+  <span class="nx">prevBlockHash</span><span class="err">:</span> <span class="s1">'Genesis block'</span> <span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">1120</span> <span class="nx">from</span> <span class="nx">JACK</span> <span class="nx">to</span> <span class="nx">JASON</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">300</span> <span class="nx">from</span> <span class="nx">JASON</span> <span class="nx">to</span> <span class="nx">JACK</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">2700</span> <span class="nx">from</span> <span class="nx">JACK</span> <span class="nx">to</span> <span class="nx">JASON</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Mining</span><span class="p">............</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Transaction</span><span class="err">:</span> <span class="mi">1</span> <span class="nx">from</span> <span class="mi">00000</span> <span class="nx">to</span> <span class="nx">miningNode</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Create</span> <span class="k">new</span> <span class="nx">Block</span><span class="err">:</span>
+ <span class="nx">Block</span> <span class="p">{</span>
+  <span class="nl">index</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+  <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271758</span><span class="p">,</span>
+  <span class="nx">transactions</span><span class="err">:</span>
+   <span class="p">[</span> <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">1120</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'JASON'</span> <span class="p">},</span>
+     <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'JASON'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'JACK'</span> <span class="p">},</span>
+     <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">2700</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'JACK'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'JASON'</span> <span class="p">},</span>
+     <span class="p">{</span> <span class="na">amount</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">sender</span><span class="p">:</span> <span class="s1">'00000'</span><span class="p">,</span> <span class="na">recipient</span><span class="p">:</span> <span class="s1">'miningNode'</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">nonce</span><span class="err">:</span> <span class="mi">114</span><span class="p">,</span>
+  <span class="nx">hash</span><span class="err">:</span>
+   <span class="s1">'004c9050ff88b37deafc039a0ec3c4212a5cadb4a51e57039b928b64edfcd82b'</span><span class="p">,</span>
+  <span class="nx">prevBlockHash</span><span class="err">:</span>
+   <span class="s1">'00fc872e1ec7592dc50432882f601d0a30805d40925760e2b4363d288bee0d1e'</span> <span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Current</span> <span class="nx">Blockchain</span> <span class="nx">Data</span><span class="err">:</span>
+ <span class="nx">Blockchain</span> <span class="p">{</span>
+  <span class="nl">chain</span><span class="p">:</span>
+   <span class="p">[</span> <span class="nx">Block</span> <span class="p">{</span>
+       <span class="nl">index</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271727</span><span class="p">,</span>
+       <span class="nx">transactions</span><span class="err">:</span> <span class="p">[],</span>
+       <span class="nx">nonce</span><span class="err">:</span> <span class="mi">100</span><span class="p">,</span>
+       <span class="nx">hash</span><span class="err">:</span> <span class="s1">'Genesis block'</span><span class="p">,</span>
+       <span class="nx">prevBlockHash</span><span class="err">:</span> <span class="s1">'0'</span> <span class="p">},</span>
+     <span class="nx">Block</span> <span class="p">{</span>
+       <span class="nl">index</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+       <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271748</span><span class="p">,</span>
+       <span class="nx">transactions</span><span class="err">:</span> <span class="p">[</span><span class="nb">Array</span><span class="p">],</span>
+       <span class="nx">nonce</span><span class="err">:</span> <span class="mi">158</span><span class="p">,</span>
+       <span class="nx">hash</span><span class="err">:</span>
+        <span class="s1">'00fc872e1ec7592dc50432882f601d0a30805d40925760e2b4363d288bee0d1e'</span><span class="p">,</span>
+       <span class="nx">prevBlockHash</span><span class="err">:</span> <span class="s1">'Genesis block'</span> <span class="p">},</span>
+     <span class="nx">Block</span> <span class="p">{</span>
+       <span class="nl">index</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+       <span class="nx">timestamp</span><span class="err">:</span> <span class="mi">1531653271758</span><span class="p">,</span>
+       <span class="nx">transactions</span><span class="err">:</span> <span class="p">[</span><span class="nb">Array</span><span class="p">],</span>
+       <span class="nx">nonce</span><span class="err">:</span> <span class="mi">114</span><span class="p">,</span>
+       <span class="nx">hash</span><span class="err">:</span>
+        <span class="s1">'004c9050ff88b37deafc039a0ec3c4212a5cadb4a51e57039b928b64edfcd82b'</span><span class="p">,</span>
+       <span class="nx">prevBlockHash</span><span class="err">:</span>
+        <span class="s1">'00fc872e1ec7592dc50432882f601d0a30805d40925760e2b4363d288bee0d1e'</span> <span class="p">}</span> <span class="p">],</span>
+  <span class="nx">pendingTransactions</span><span class="err">:</span> <span class="p">[]</span> <span class="p">}</span>
+
+  </code></pre></figure>
+
+<h3 id="making-development-faster">Making Development Faster</h3>
+<p>Instead of running <code class="highlighter-rouge">node test/blockchain.js</code> we can use 
+<code class="highlighter-rouge">nodemon test/blockchain.js</code>, here we use <a href="https://github.com/remy/nodemon">nodemon</a> which helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.</p>
+
+<p><a href="https://github.com/sumn2u/blockchain-node/archive/master.zip">Source Code for Blockchain in Nodejs</a></p>
+
+<h3 id="additional">Additional</h3>
+<p>Implementation of blockchain using Nodejs to build a coin for demonstration purpose can be seen in <a href="https://github.com/sumn2u/fusecoin">Fusecoin</a>. This is by  no means a complete implementation and it is by no means secure!</p>
+
+<p>In the <code class="highlighter-rouge">src/</code> directory you’ll find different versions:</p>
+
+<ul>
+  <li>v1: implementation of blockchain basics</li>
+  <li>v2: Added proof-of-work mechanism</li>
+  <li>v3: Added multiple transactions &amp; mining rewards</li>
+</ul>
+
+<p>References</p>
+
+<p>[1]http://hyperledger-fabric.readthedocs.io/en/latest/glossary.html#ledger
+[2]https://cointelegraph.com/explained/proof-of-work-explained</p>
+
+        <div class="page-footer">
+          <div class="page-tag">
+            <span>Tags:</span>
+            
+            <a href="/tags#Blockchain" class="tag">| Blockchain</a>
+            
+            <a href="/tags#Nodejs" class="tag">| Nodejs</a>
+            
+          </div><!-- End Tags -->
+          <div class="page-share">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Building Blockchain Using Nodejs&url=http://localhost:4000/blockchain/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://facebook.com/sharer.php?u=http://localhost:4000/blockchain/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://plus.google.com/share?url=http://localhost:4000/blockchain/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          </div><!-- End Share -->
+        </div>
+        <section class="author-box">
+  <img src="/assets/img/avatar.jpg" alt="Suman Kunwar" class="author-img">
+  <div class="author-desc">
+    <h2>Suman Kunwar</h2>
+    <p>I'm Suman, experienced javascript developer, open source enthusiast and interested to help lower the barrier for people to contribute to open source in general</p>
+    <ul>
+      
+        <li class="email"><a href="mailto:sumn2u@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+      
+      
+        <li class="phone"><a href="tel:+1 201 680 8700"><i class="fa fa-phone"></i></a></li>
+      
+      
+        <li class="website"><a href="http://https://humanassistai.com/" target="_blank"><i class="fa fa-globe"></i></a></li>
+      
+      
+        <li class="twitter"><a href="https://twitter.com/@sumn2u" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      
+    </ul>
+  </div>
+</section>
+
+        <div class="recent-box">
+  <h2 class="recent-title">Recent post</h2>
+  <div class="recent-list">
+    
+      
+        <a href="/blockchain/" class="recent-item" style="background: url(/assets/img/post-6.jpg) center no-repeat; background-size: cover;"><span>Building Blockchain Using Nodejs</span></a>
+      
+    
+  </div>
+</div> <!-- End Recent-Box -->
+
+        <div class="newsletter" id="mc_embed_signup">
+  <h2 class="newsletter-title">Newsletter</h2>
+  <div class="form-container">
+    <p>Subscribe here to get our latest updates</p>
+    <form action="//" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <label class="screen-reader-text" for="mce-EMAIL">Email Address</label>
+      <div class="newsletter-box" id="mc_embed_signup_scroll">
+        <input type="email" name="EMAIL" placeholder="Email address" class="email-input" id="mce-EMAIL" required>
+        <input type="submit" value="Subscribe" name="subscribe" class="subscribe-btn" id="mc-embedded-subscribe">
+      </div>
+    </form>
+  </div>
+</div> <!-- End Newsletter -->
+
+        <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//iamsuman.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+      </div>
+    </div> <!-- End Wrapper -->
+  </article>
+  <div class="search-box">
+  <div class="wrapper">
+    <div class="search-grid">
+      <form class="search-form">
+        <div id="search-container">
+          <input type="text" id="search-input" class="search" placeholder="Search">
+        </div>
+      </form>
+      <ul id="results-container" class="results-search"></ul>
+      <div class="icon-close-container">
+        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer class="main-footer">
+  <div class="copyright">
+    <p>2018 &copy; Suman Kunwar</p>
+  </div>
+</footer> <!-- End Footer -->
+
+</div>
+
+  <!-- JS -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jekyll-search.js"></script>
+<script>
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('results-container'),
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
+    noResultsText: 'No results found',
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+
+  
+
+</body>
+</html>

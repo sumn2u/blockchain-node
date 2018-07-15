@@ -147,3 +147,81 @@ app.listen(3000, function () {
 – Run the API with command: `npm start`.
 
 – Open browser with url: `http://localhost:3000/blockchain`.
+
+It will give you result of: 
+
+{% highlight json %}
+   {
+  "chain": [
+    {
+      "index": 1,
+      "timestamp": 1531685189689,
+      "transactions": [],
+      "nonce": 100,
+      "hash": "Genesis block",
+      "prevBlockHash": "0"
+    }
+  ],
+  "pendingTransactions": []
+}
+{% endhighlight %}
+
+Now run `mine` endpoint.i.e
+`http://localhost:3000/mine`.
+
+It will mine and give the result of
+
+{% highlight json %}
+{
+  "message": "Mining new Block successfully!",
+  "newBlock": {
+    "index": 2,
+    "timestamp": 1531685261672,
+    "transactions": [
+      {
+        "amount": 1,
+        "sender": "00000",
+        "recipient": "sampleapp"
+      }
+    ],
+    "nonce": 44,
+    "hash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964",
+    "prevBlockHash": "Genesis block"
+  }
+}
+{% endhighlight %}
+
+Now run `http://localhost:3000/blockchain`.It will give you following result
+{% highlight json %}
+ {
+  "chain": [
+    {
+      "index": 1,
+      "timestamp": 1531685189689,
+      "transactions": [],
+      "nonce": 100,
+      "hash": "Genesis block",
+      "prevBlockHash": "0"
+    },
+    {
+      "index": 2,
+      "timestamp": 1531685261672,
+      "transactions": [
+        {
+          "amount": 1,
+          "sender": "00000",
+          "recipient": "sampleapp"
+        }
+      ],
+      "nonce": 44,
+      "hash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964",
+      "prevBlockHash": "Genesis block"
+    }
+  ],
+  "pendingTransactions": []
+}
+{% endhighlight %}
+
+
+No make a transaction. make a `POST` request through postman.
+![Transaction]({{site.baseurl}}/assets/img/transaction.png)

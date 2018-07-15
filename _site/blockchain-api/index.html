@@ -191,6 +191,78 @@ It is a middleware that can parse incoming request bodies before handlers, avail
 
 <p>– Open browser with url: <code class="highlighter-rouge">http://localhost:3000/blockchain</code>.</p>
 
+<p>It will give you result of:</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="w">   </span><span class="p">{</span><span class="w">
+  </span><span class="nt">"chain"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531685189689</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"pendingTransactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Now run <code class="highlighter-rouge">mine</code> endpoint.i.e
+<code class="highlighter-rouge">http://localhost:3000/mine</code>.</p>
+
+<p>It will mine and give the result of</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mining new Block successfully!"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"newBlock"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531685261672</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleapp"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">44</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Now run <code class="highlighter-rouge">http://localhost:3000/blockchain</code>.It will give you following result</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nt">"chain"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531685189689</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531685261672</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleapp"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">44</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"pendingTransactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>No make a transaction. make a <code class="highlighter-rouge">POST</code> request through postman.
+<img src="/assets/img/transaction.png" alt="Transaction" /></p>
+
         <div class="page-footer">
           <div class="page-tag">
             <span>Tags:</span>

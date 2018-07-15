@@ -39,7 +39,7 @@ npm init
 ```
 Install SHA256 module to compute SHA256 of strings or bytes.
 ```
-npm install sha256
+npm i sha256 -S -D
 ```
 
 Now our blockchain-node folder structure looks like this:

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Building Blockchain REST API Using Nodejs - Blogs Human Assist AI</title>
+	<meta name="description" content="Blockchain REST API development using Nodejs">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#311e3e">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#311e3e">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+	<!-- Icon -->
+	<link rel="icon" href="/assets/humanassitai.ico">
+</head>
+
+<body>
+  <div class="flex-container">
+  <header class="main-header">
+  <div class="wrapper">
+    <div class="header-flex">
+      <div class="menu-icon-container">
+        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+      </div>
+      <nav class="main-nav">
+        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+        <ul>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+      <p class="logo"><a href="/">Human Assist AI</a></p>
+      <div class="search-icon-container">
+        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+</header> <!-- End Header -->
+
+  <article class="article-page">
+    <div class="page-image">
+      <div class="cover-image" style="background: url(/assets/img/post-5.jpg) center no-repeat; background-size: cover;"></div>
+    </div>
+    <div class="wrapper">
+      <div class="page-content">
+        <div class="header-page">
+          <h1 class="page-title">Building Blockchain REST API Using Nodejs</h1>
+          <div class="page-date"><time datetime="2018-07-14 13:32:20 +0300">2018, Jul 14</time></div>
+        </div>
+        <p>Blockchain is an <code class="highlighter-rouge">immutable distributed ledger </code>.A ledger consists of two distinct, though related, parts – a <code class="highlighter-rouge">blockchain</code> and the <code class="highlighter-rouge">state database</code>, also known as <code class="highlighter-rouge">world state</code>. Unlike other ledgers, blockchains are immutable – that is, once a block has been added to the chain, it cannot be changed. In contrast, the <code class="highlighter-rouge">world state</code> is a database containing the current value of the set of key-value pairs that have been added, modified or deleted by the set of validated and committed transactions in the blockchain.<a href="http://hyperledger-fabric.readthedocs.io/en/latest/glossary.html#ledger">1</a></p>
+
+<h4 id="overview">Overview</h4>
+<p>Here we are going to create an REST API to interact with the blockchain we made. For that we are using <code class="highlighter-rouge">Express.js</code> to create our server. We will use three different endpoints to communicate with our block chain.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="cm">/* to get all list of blockchain */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/blockchain'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+<span class="cm">/* to make a new transaction */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/transaction'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+ <span class="cm">/* to mine data using PoW concept */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/mine'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">});</span></code></pre></figure>
+
+<hr />
+
+<h3 id="project-folder-structure">Project folder structure</h3>
+<p>With your favourite text editor open the created <code class="highlighter-rouge">blockchain-node</code> project folder, go inside that folder and create <code class="highlighter-rouge">app.js</code> file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>blockchain-node
+│   README.md
+|   package.json
+|   app.js
+|   
+|___node_modules
+|
+└───src
+│   │   blockchain.js  
+└───test
+    │   blockchain.js  
+</code></pre>
+</div>
+
+<h3 id="install-expressjs">Install Express.js</h3>
+<p>Run command: <code class="highlighter-rouge">npm i express -S -D</code>.</p>
+
+<p>Inside app.js, import and initialize Express.js:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span></code></pre></figure>
+
+<p>Install body-parser
+It is a middleware that can parse incoming request bodies before handlers, available under the <code class="highlighter-rouge">req.body</code> property.</p>
+
+<p>To install it, run command: <code class="highlighter-rouge">npm i body-parser -S -D</code>.</p>
+
+<p>Inside <code class="highlighter-rouge">app.js</code>, add the code below:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">bodyParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'body-parser'</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span></code></pre></figure>
+
+<p><code class="highlighter-rouge">bodyParser.json()</code> returns middleware that only parses json.</p>
+
+<h3 id="install-nodemon">Install nodemon</h3>
+<p>We are using <code class="highlighter-rouge">nodemon</code> here which automatically restarts the node application when file changes in the directory are detected.</p>
+
+<p>To install it, run command: <code class="highlighter-rouge">npm i nodemon -S -D</code>.</p>
+
+<p>Then add start script to   <code class="highlighter-rouge">package.json</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">   <span class="p">......</span>
+   <span class="s2">"start"</span><span class="err">:</span> <span class="s2">"nodemon --watch src -e js src/api.js"</span>
+   <span class="p">......</span></code></pre></figure>
+
+<p>Add this code snippnet to your<code class="highlighter-rouge"> app.js</code> file.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">),</span>
+      <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">(),</span>
+      <span class="nx">bodyParser</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'body-parser'</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+
+<span class="kr">const</span> <span class="nx">nodeAddr</span> <span class="o">=</span> <span class="s1">'sampleapp'</span><span class="p">;</span>
+
+<span class="kr">const</span> <span class="nx">Blockchain</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./src/blockchain'</span><span class="p">);</span><span class="c1">// require js pattern</span>
+<span class="kr">const</span> <span class="nx">bitcoin</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blockchain</span><span class="p">();</span> 
+<span class="cm">/* to get all list of blockchain */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/blockchain'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">bitcoin</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="cm">/* to make a new transaction */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/transaction'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">blockIndex</span> <span class="o">=</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">amount</span><span class="p">,</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">recipient</span>
+    <span class="p">);</span>
+
+    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="na">message</span><span class="p">:</span> <span class="err">`</span><span class="nx">Transaction</span> <span class="nx">is</span> <span class="nx">added</span> <span class="nx">to</span> <span class="nx">block</span> <span class="kd">with</span> <span class="na">index</span><span class="p">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">blockIndex</span><span class="p">}</span><span class="err">`</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">});</span>
+ <span class="cm">/* to mine data using PoW concept */</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/mine'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">latestBlock</span> <span class="o">=</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">getLatestBlock</span><span class="p">();</span>
+    <span class="kr">const</span> <span class="nx">prevBlockHash</span> <span class="o">=</span> <span class="nx">latestBlock</span><span class="p">.</span><span class="nx">hash</span><span class="p">;</span>
+    <span class="kr">const</span> <span class="nx">currentBlockData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">transactions</span><span class="p">:</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">pendingTransactions</span><span class="p">,</span>
+        <span class="na">index</span><span class="p">:</span> <span class="nx">latestBlock</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">}</span>
+    <span class="kr">const</span> <span class="nx">nonce</span> <span class="o">=</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">proofOfWork</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">blockHash</span> <span class="o">=</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">hashBlock</span><span class="p">(</span><span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">currentBlockData</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">);</span>
+
+    <span class="c1">// reward for mining</span>
+    <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">makeNewTransaction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'00000'</span><span class="p">,</span> <span class="nx">nodeAddr</span><span class="p">);</span>
+
+    <span class="kr">const</span> <span class="nx">newBlock</span> <span class="o">=</span> <span class="nx">bitcoin</span><span class="p">.</span><span class="nx">creatNewBlock</span><span class="p">(</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">prevBlockHash</span><span class="p">,</span> <span class="nx">blockHash</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="na">message</span><span class="p">:</span> <span class="s1">'Mining new Block successfully!'</span><span class="p">,</span>
+            <span class="nx">newBlock</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'&gt; listening on port 3000...'</span><span class="p">);</span>
+<span class="p">});</span></code></pre></figure>
+
+<h3 id="run-and-test-api">Run and Test API</h3>
+<p>– Run the API with command: <code class="highlighter-rouge">npm start</code>.</p>
+
+<p>– Open browser with url: <code class="highlighter-rouge">http://localhost:3000/blockchain</code>.</p>
+
+        <div class="page-footer">
+          <div class="page-tag">
+            <span>Tags:</span>
+            
+            <a href="/tags#Blockchain" class="tag">| Blockchain</a>
+            
+            <a href="/tags#Nodejs" class="tag">| Nodejs</a>
+            
+            <a href="/tags#REST API" class="tag">| REST API</a>
+            
+          </div><!-- End Tags -->
+          <div class="page-share">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Building Blockchain REST API Using Nodejs&url=http://localhost:4000/blockchain-api/" title="Share on Twitter" rel="nofollow" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://facebook.com/sharer.php?u=http://localhost:4000/blockchain-api/" title="Share on Facebook" rel="nofollow" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://plus.google.com/share?url=http://localhost:4000/blockchain-api/" title="Share on Google+" rel="nofollow" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a>
+          </div><!-- End Share -->
+        </div>
+        <section class="author-box">
+  <img src="/assets/img/avatar.png" alt="Human Assist AI" class="author-img">
+  <div class="author-desc">
+    <h2>Human Assist AI</h2>
+    <p>we developed a crowdfunding platform under a unique concept of its type through our experts</p>
+    <ul>
+      
+        <li class="email"><a href="mailto:sumn2u@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+      
+      
+        <li class="phone"><a href="tel:+1 201 680 8700"><i class="fa fa-phone"></i></a></li>
+      
+      
+        <li class="website"><a href="http://https://humanassistai.com/" target="_blank"><i class="fa fa-globe"></i></a></li>
+      
+      
+        <li class="twitter"><a href="https://twitter.com/@sumn2u" target="_blank"><i class="fa fa-twitter"></i></a></li>
+      
+    </ul>
+  </div>
+</section>
+
+        <div class="recent-box">
+  <h2 class="recent-title">Recent post</h2>
+  <div class="recent-list">
+    
+      
+        <a href="/blockchain-api/" class="recent-item" style="background: url(/assets/img/post-5.jpg) center no-repeat; background-size: cover;"><span>Building Blockchain REST API Using Nodejs</span></a>
+      
+    
+      
+        <a href="/blockchain/" class="recent-item" style="background: url(/assets/img/post-6.jpg) center no-repeat; background-size: cover;"><span>Building Blockchain Using Nodejs</span></a>
+      
+    
+  </div>
+</div> <!-- End Recent-Box -->
+
+        <div class="newsletter" id="mc_embed_signup">
+  <h2 class="newsletter-title">Newsletter</h2>
+  <div class="form-container">
+    <p>Subscribe here to get our latest updates</p>
+    <form action="//" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <label class="screen-reader-text" for="mce-EMAIL">Email Address</label>
+      <div class="newsletter-box" id="mc_embed_signup_scroll">
+        <input type="email" name="EMAIL" placeholder="Email address" class="email-input" id="mce-EMAIL" required>
+        <input type="submit" value="Subscribe" name="subscribe" class="subscribe-btn" id="mc-embedded-subscribe">
+      </div>
+    </form>
+  </div>
+</div> <!-- End Newsletter -->
+
+        <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//iamsuman.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+      </div>
+    </div> <!-- End Wrapper -->
+  </article>
+  <div class="search-box">
+  <div class="wrapper">
+    <div class="search-grid">
+      <form class="search-form">
+        <div id="search-container">
+          <input type="text" id="search-input" class="search" placeholder="Search">
+        </div>
+      </form>
+      <ul id="results-container" class="results-search"></ul>
+      <div class="icon-close-container">
+        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer class="main-footer">
+  <div class="copyright">
+    <p>2018 &copy; Human Assist AI</p>
+  </div>
+</footer> <!-- End Footer -->
+
+</div>
+
+  <!-- JS -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jekyll-search.js"></script>
+<script>
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('results-container'),
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
+    noResultsText: 'No results found',
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105744265-2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-105744265-2');
+</script>
+</body>
+</html>

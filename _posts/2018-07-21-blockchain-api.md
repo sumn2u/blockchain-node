@@ -267,3 +267,79 @@ Now run again the `http://localhost:3000/blockchain`
 
 
 You can see the pending transactions. Now the miner will mine it. Now run the `http://localhost:3000/mine` endpoint.
+{% highlight json %}
+{
+  "message": "Mining new Block successfully!",
+  "newBlock": {
+    "index": 3,
+    "timestamp": 1531686968213,
+    "transactions": [
+      {
+        "amount": 190,
+        "sender": "JACKIE",
+        "recipient": "HELEN"
+      },
+      {
+        "amount": 1,
+        "sender": "00000",
+        "recipient": "sampleapp"
+      }
+    ],
+    "nonce": 71,
+    "hash": "00766767c03993c1c5269bd531599c7e67f414c27f0d8bd56b5de2c7f5964e5f",
+    "prevBlockHash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"
+  }
+}
+{% endhighlight %}
+
+Now let's again run `http://localhost:3000/blockchain` to see our amount is recieved or not and also pending transactions status. 
+{% highlight json %}
+ {
+  "chain": [
+    {
+      "index": 1,
+      "timestamp": 1531686938909,
+      "transactions": [],
+      "nonce": 100,
+      "hash": "Genesis block",
+      "prevBlockHash": "0"
+    },
+    {
+      "index": 2,
+      "timestamp": 1531686952090,
+      "transactions": [
+        {
+          "amount": 1,
+          "sender": "00000",
+          "recipient": "sampleapp"
+        }
+      ],
+      "nonce": 44,
+      "hash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964",
+      "prevBlockHash": "Genesis block"
+    },
+    {
+      "index": 3,
+      "timestamp": 1531686968213,
+      "transactions": [
+        {
+          "amount": 190,
+          "sender": "JACKIE",
+          "recipient": "HELEN"
+        },
+        {
+          "amount": 1,
+          "sender": "00000",
+          "recipient": "sampleapp"
+        }
+      ],
+      "nonce": 71,
+      "hash": "00766767c03993c1c5269bd531599c7e67f414c27f0d8bd56b5de2c7f5964e5f",
+      "prevBlockHash": "00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"
+    }
+  ],
+  "pendingTransactions": []
+}
+{% endhighlight %}
+
+Here we can see we recived the amount and also there is no much transactions. In this way we can use REST API to interact with our block chain.

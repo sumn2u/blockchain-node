@@ -302,6 +302,80 @@ It is a middleware that can parse incoming request bodies before handlers, avail
 
 <p>You can see the pending transactions. Now the miner will mine it. Now run the <code class="highlighter-rouge">http://localhost:3000/mine</code> endpoint.</p>
 
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mining new Block successfully!"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"newBlock"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531686968213</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">190</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JACKIE"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HELEN"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleapp"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">71</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00766767c03993c1c5269bd531599c7e67f414c27f0d8bd56b5de2c7f5964e5f"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Now let’s again run <code class="highlighter-rouge">http://localhost:3000/blockchain</code> to see our amount is recieved or not and also pending transactions status.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nt">"chain"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531686938909</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531686952090</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleapp"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">44</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Genesis block"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1531686968213</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">190</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JACKIE"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HELEN"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"sender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleapp"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="mi">71</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00766767c03993c1c5269bd531599c7e67f414c27f0d8bd56b5de2c7f5964e5f"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"prevBlockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00669af06fa8d395bea4f6325d39f43a3c87788152fc3050608aa23e55dfe964"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"pendingTransactions"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Here we can see we recived the amount and also there is no much transactions. In this way we can use REST API to interact with our block chain.</p>
+
         <div class="page-footer">
           <div class="page-tag">
             <span>Tags:</span>
